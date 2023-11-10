@@ -85,12 +85,12 @@ class GestorTareas:
         else:
             messagebox.showinfo("Tareas Próximas a Vencer", "No hay tareas próximas a vencer en los próximos 7 días.")
 
-def agregar_tarea_click():
-    nombre_tarea=entry_nombre.get()
-    estado_tarea=entry_estado.get()
-    fecha_limite=entry_fecha.get()  
+def agregar_tarea_click(event=None):
+    nombre_tarea = entry_nombre.get()
+    estado_tarea = entry_estado.get()
+    fecha_limite = entry_fecha.get()
 
-    nueva_tarea=Tarea(nombre_tarea, estado_tarea, fecha_limite)
+    nueva_tarea = Tarea(nombre_tarea, estado_tarea, fecha_limite)
     gestor_tareas.agregar_tarea(nueva_tarea)
     actualizar_listbox()
 
@@ -99,7 +99,7 @@ def listar_tareas_click():
     text_tareas.delete("1.0", tk.END)
     text_tareas.insert(tk.END, tareas)
 
-def buscar_tarea_click():
+def buscar_tarea_click(event=None):
     nombre_buscar=entry_buscar.get()
     tarea_encontrada=gestor_tareas.buscar_tarea(nombre_buscar)
     if tarea_encontrada:
@@ -107,7 +107,7 @@ def buscar_tarea_click():
     else:
         messagebox.showinfo("Tarea no encontrada", "No se encontro la tarea con ese nombre.")
 
-def borrar_tarea_click():
+def borrar_tarea_click(event=None):
     nombre_borrar=entry_borrar.get()
     gestor_tareas.borrar_tarea(nombre_borrar)
     actualizar_listbox()
@@ -132,6 +132,7 @@ if __name__=="__main__":
     ventana.title("Gestion de Tareas")
 
     
+    
     label_nombre=tk.Label(ventana, text="Nombre de la tarea:")
     entry_nombre=tk.Entry(ventana)
     label_estado=tk.Label(ventana, text="Estado de la tarea:")
@@ -153,7 +154,10 @@ if __name__=="__main__":
     btn_mostrar_tareas_vencer = tk.Button(ventana, text="Mostrar Tareas Próximas a Vencer", command=mostrar_tareas_proximas_a_vencer)
     btn_mostrar_tareas_vencer.grid(row=9, column=0, columnspan=2)
 
-    
+
+    entry_fecha.bind("<Return>", agregar_tarea_click)  # Asociar Enter con la función agregar_tarea_click
+    entry_buscar.bind("<Return>", buscar_tarea_click)
+    entry_borrar.bind("<Return>", borrar_tarea_click)
 
 
     # Posicionar widgets

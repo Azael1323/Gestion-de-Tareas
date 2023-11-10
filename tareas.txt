@@ -1,6 +1,11 @@
 Codigo 1,Haciendo,10/11/2023
-Codigo 2,Finalizado,10/11/2023
 Nombre tarea,Estado,Fecha
 comer,pendiente,11/11/2023
 comer,pendiente,11/11/2023
 comer,pendiente,11/11/2023
+nombre,pendiente,12/12/2023
+nombre,pendiente,12/12/2023
+nombre,pendiente,12/12/2023
+nombre,pendiente,12/12/2023
+nombre,pendiente,12/12/2023
+nombre,pendiente,12/12/2023
