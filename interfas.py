@@ -85,6 +85,34 @@ class GestorTareas:
         else:
             messagebox.showinfo("Tareas Próximas a Vencer", "No hay tareas próximas a vencer en los próximos 7 días.")
 
+def actualizar_listbox():
+    listbox_tareas.delete(0, tk.END)
+    with open(gestor_tareas.archivo_tareas, "r", encoding="utf-8") as archivo:
+        for linea in archivo:
+            try:
+                nombre, estado, fecha = linea.strip().split(",")
+                tarea_info = f"Nombre: {nombre}. -Estado: {estado}. -Fecha: {fecha}."
+                listbox_tareas.insert(tk.END, tarea_info)
+            except ValueError:
+                print(f"Error al leer la línea: {linea}. Se omite esta tarea.")
+
+def seleccionar_tarea(event=None):
+    # Elimina la manipulación automática del campo de entrada al seleccionar una tarea
+    pass
+
+def borrar_tarea_click(event=None):
+    try:
+        seleccion = listbox_tareas.curselection()
+        if seleccion:
+            nombre_borrar = listbox_tareas.get(seleccion)
+            listbox_tareas.delete(seleccion)
+            gestor_tareas.borrar_tarea(nombre_borrar)
+            messagebox.showinfo("Tarea borrada", "La tarea se ha borrado con éxito.")
+        else:
+            messagebox.showwarning("Ninguna tarea seleccionada", "Por favor, selecciona una tarea antes de borrar.")
+    except tk.TclError:
+        messagebox.showwarning("Error", "No hay tareas en la lista.")
+
 def agregar_tarea_click(event=None):
     nombre_tarea = entry_nombre.get()
     estado_tarea = entry_estado.get()
@@ -93,6 +121,11 @@ def agregar_tarea_click(event=None):
     if nombre_tarea and estado_tarea and fecha_limite:
         nueva_tarea = Tarea(nombre_tarea, estado_tarea, fecha_limite)
         gestor_tareas.agregar_tarea(nueva_tarea)
+
+        # borrar los campos de entrada
+        entry_nombre.delete(0, tk.END)
+        entry_estado.delete(0, tk.END)
+        entry_fecha.delete(0, tk.END)
         actualizar_listbox()
     else:
         campos_vacios = ""
@@ -106,8 +139,8 @@ def agregar_tarea_click(event=None):
 
 def listar_tareas_click():
     tareas=gestor_tareas.listar_tareas()
-    text_tareas.delete("1.0", tk.END)
-    text_tareas.insert(tk.END, tareas)
+    listbox_tareas.delete(0, tk.END)
+    listbox_tareas.insert(tk.END, tareas)
 
 def buscar_tarea_click(event=None):
     nombre_buscar=entry_buscar.get()
@@ -117,30 +150,14 @@ def buscar_tarea_click(event=None):
     else:
         messagebox.showinfo("Tarea no encontrada", "No se encontro la tarea con ese nombre.")
 
-def borrar_tarea_click(event=None):
-    nombre_borrar=entry_borrar.get()
-    gestor_tareas.borrar_tarea(nombre_borrar)
-    actualizar_listbox()
-    messagebox.showinfo("Tarea borrada", "La tarea se ha borrado con exito.")
-
-def actualizar_listbox():
-    text_tareas.delete("1.0", tk.END)
-    for tarea in gestor_tareas.tareas:
-        text_tareas.insert(tk.END, str(tarea) + "\n------------------------\n")
-
 def mostrar_tareas_proximas_a_vencer():
     gestor_tareas.tareas_proximas_a_vencer()
-
-def actualizar_listbox():
-    listar_tareas_click()
 
 if __name__=="__main__":
     gestor_tareas=GestorTareas()
 
     ventana=tk.Tk()
     ventana.title("Gestion de Tareas")
-
-    
     
     label_nombre=tk.Label(ventana, text="Nombre de la tarea:")
     entry_nombre=tk.Entry(ventana)
@@ -154,12 +171,12 @@ if __name__=="__main__":
     entry_buscar=tk.Entry(ventana)
     btn_buscar=tk.Button(ventana, text="Buscar tarea", command=buscar_tarea_click)
 
-    label_borrar=tk.Label(ventana, text="Borrar tarea por nombre:")
-    entry_borrar=tk.Entry(ventana)
-    btn_borrar=tk.Button(ventana, text="Borrar tarea", command=borrar_tarea_click)
+    btn_borrar = tk.Button(ventana, text="Borrar tarea", command=borrar_tarea_click)
 
-    text_tareas=tk.Text(ventana, width=50, height=10)
-    
+    listbox_tareas = tk.Listbox(ventana, font=("Arial", 12), width=40, height=10)
+    listbox_tareas.grid(row=8, column=0, columnspan=2)
+    listbox_tareas.bind("<<ListboxSelect>>", seleccionar_tarea)
+
     btn_mostrar_tareas_vencer = tk.Button(ventana, text="Mostrar Tareas Próximas a Vencer", command=mostrar_tareas_proximas_a_vencer)
     btn_mostrar_tareas_vencer.grid(row=9, column=0, columnspan=2)
 
@@ -168,8 +185,7 @@ if __name__=="__main__":
     entry_estado.bind("<Return>", agregar_tarea_click)
     entry_fecha.bind("<Return>", agregar_tarea_click)  
     entry_buscar.bind("<Return>", buscar_tarea_click)
-    entry_borrar.bind("<Return>", borrar_tarea_click)
-
+    listbox_tareas.bind("<Double-Button-1>", seleccionar_tarea)  # Seleccionar tarea al hacer doble clic
 
     # Posicionar widgets
     label_nombre.grid(row=0, column=0)
@@ -182,15 +198,8 @@ if __name__=="__main__":
 
     label_buscar.grid(row=4, column=0)
     entry_buscar.grid(row=4, column=1)
-    btn_buscar.grid(row=5, column=0, columnspan=2)
-
-    label_borrar.grid(row=6, column=0)
-    entry_borrar.grid(row=6, column=1)
-    btn_borrar.grid(row=7, column=0, columnspan=2)
-
-    text_tareas.grid(row=8, column=0, columnspan=2)
-
-
+    btn_buscar.grid(row=5, column=0)
+    btn_borrar.grid(row=5, column=1)
 
     # Mostrar las tareas existentes al inicio
     actualizar_listbox()
