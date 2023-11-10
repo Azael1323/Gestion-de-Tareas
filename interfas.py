@@ -286,8 +286,8 @@ if __name__=="__main__":
     menu_superior.add_cascade(label="Cambiar Tema", menu=menu_cambiarTema)
 
     # Subopciones para el menú "Cambiar Tema"
-    menu_cambiarTema.add_command(label="Tema Claro", command=lambda: cambiarTema())
-    menu_cambiarTema.add_command(label="Tema Oscuro", command=lambda: cambiarTema())
+    menu_cambiarTema.add_command(label="Realizar cambio", command=lambda: cambiarTema())
+
 
     menu_filtrar_estado = tk.Menu(menu_filtrar, tearoff=0)
     menu_filtrar.add_cascade(label="Estado", menu=menu_filtrar_estado)
