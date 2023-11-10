@@ -92,7 +92,7 @@ def actualizar_listbox():
         for linea in archivo:
             try:
                 nombre, estado, fecha = linea.strip().split(",")
-                tarea_info = f"Nombre: {nombre}. -Estado: {estado}. -Fecha: {fecha}."
+                tarea_info = f"Nombre: {nombre}. Estado: {estado}. Fecha: {fecha}."
                 listbox_tareas.insert(tk.END, tarea_info)
             except ValueError:
                 print(f"Error al leer la línea: {linea}. Se omite esta tarea.")
@@ -115,7 +115,6 @@ def borrar_tarea_click(event=None):
             messagebox.showwarning("Ninguna tarea seleccionada", "Por favor, selecciona una tarea antes de borrar.")
     except tk.TclError:
         messagebox.showwarning("Error", "No hay tareas en la lista.")
-
 
 def agregar_tarea_click(event=None):
     nombre_tarea = entry_nombre.get()
@@ -157,12 +156,111 @@ def buscar_tarea_click(event=None):
 def mostrar_tareas_proximas_a_vencer():
     gestor_tareas.tareas_proximas_a_vencer()
 
+def filtrar_por_estado(estado_filtrado, orden):
+    tareas = []
+    with open(gestor_tareas.archivo_tareas, "r", encoding="utf-8") as archivo:
+        for linea in archivo:
+            nombre, estado, fecha = linea.strip().split(",")
+            tarea_info = f"Nombre: {nombre}. Estado: {estado}. Fecha: {fecha}."
+            tareas.append(tarea_info)
+
+    if estado_filtrado is not None:
+        tareas = [tarea for tarea in tareas if f"Estado: {estado_filtrado.lower()}" in tarea.lower()]
+
+    clave = lambda x: x.split(".")[1].split(": ")[1]
+    tareas.sort(key=clave, reverse=(orden == "Descendente"))
+
+    listbox_tareas.delete(0, tk.END)
+    for tarea in tareas:
+        listbox_tareas.insert(tk.END, tarea)
+
+def filtrar_por_fecha(orden):
+    tareas = []
+    with open(gestor_tareas.archivo_tareas, "r", encoding="utf-8") as archivo:
+        for linea in archivo:
+            nombre, estado, fecha = linea.strip().split(",")
+            tarea_info = f"Nombre: {nombre}. Estado: {estado}. Fecha: {fecha}."
+            tareas.append(tarea_info)
+
+    clave = lambda x: datetime.datetime.strptime(x.split("Fecha: ")[1].replace('.', ''), "%d/%m/%Y")
+    tareas.sort(key=clave, reverse=(orden == "Descendente"))
+
+    listbox_tareas.delete(0, tk.END)
+    for tarea in tareas:
+        listbox_tareas.insert(tk.END, tarea)
+
+def filtrar_por_nombre(orden):
+    tareas = []
+    with open(gestor_tareas.archivo_tareas, "r", encoding="utf-8") as archivo:
+        for linea in archivo:
+            nombre, estado, fecha = linea.strip().split(",")
+            tarea_info = f"Nombre: {nombre}. Estado: {estado}. Fecha: {fecha}."
+            tareas.append(tarea_info)
+
+    clave = lambda x: x.split(".")[0].split(": ")[1]
+    tareas.sort(key=clave, reverse=(orden == "Descendente"))
+
+    listbox_tareas.delete(0, tk.END)
+    for tarea in tareas:
+        listbox_tareas.insert(tk.END, tarea)
+
+variable_filtro = None
+variable_orden = None
+estado_filtrado = None
+
+def realizar_filtrado_desde_menu(opcion_filtrar, orden):
+    if opcion_filtrar == "Estado":
+        filtrar_por_estado(estado_filtrado, orden)
+    elif opcion_filtrar == "Fecha":
+        filtrar_por_fecha(orden)
+    elif opcion_filtrar == "Nombre":
+        filtrar_por_nombre(orden)
+    else:
+        print("Filtro no válido")
+
+def realizar_filtrado(event=None):
+    global variable_filtro, variable_orden
+    opcion_filtrar = variable_filtro.get() if variable_filtro else None
+    orden = variable_orden.get() if variable_orden else None
+    if opcion_filtrar and orden:
+        if opcion_filtrar == "Estado":
+            estado_filtrado = "En proceso"
+            filtrar_por_estado(estado_filtrado, orden)
+        else:
+            filtrar_por_fecha(orden) if opcion_filtrar == "Fecha" else filtrar_por_nombre(orden)
+
 if __name__=="__main__":
     gestor_tareas=GestorTareas()
 
     ventana=tk.Tk()
     ventana.title("Gestion de Tareas")
-    
+
+    # Crear el menú superior
+    menu_superior = tk.Menu(ventana)
+    ventana.config(menu=menu_superior)
+
+    # Crear los menús desplegables para filtrar
+    menu_filtrar = tk.Menu(menu_superior, tearoff=0)
+    menu_superior.add_cascade(label="Filtrar", menu=menu_filtrar)
+
+    menu_filtrar_estado = tk.Menu(menu_filtrar, tearoff=0)
+    menu_filtrar.add_cascade(label="Estado", menu=menu_filtrar_estado)
+    menu_filtrar_estado.add_command(label="Ascendente", command=lambda: realizar_filtrado_desde_menu("Estado", "Ascendente"))
+    menu_filtrar_estado.add_command(label="Descendente", command=lambda: realizar_filtrado_desde_menu("Estado", "Descendente"))
+
+    menu_filtrar_fecha = tk.Menu(menu_filtrar, tearoff=0)
+    menu_filtrar.add_cascade(label="Fecha", menu=menu_filtrar_fecha)
+    menu_filtrar_fecha.add_command(label="Ascendente", command=lambda: realizar_filtrado_desde_menu("Fecha", "Ascendente"))
+    menu_filtrar_fecha.add_command(label="Descendente", command=lambda: realizar_filtrado_desde_menu("Fecha", "Descendente"))
+
+    menu_filtrar_nombre = tk.Menu(menu_filtrar, tearoff=0)
+    menu_filtrar.add_cascade(label="Nombre", menu=menu_filtrar_nombre)
+    menu_filtrar_nombre.add_command(label="Ascendente", command=lambda: realizar_filtrado_desde_menu("Nombre", "Ascendente"))
+    menu_filtrar_nombre.add_command(label="Descendente", command=lambda: realizar_filtrado_desde_menu("Nombre", "Descendente"))
+
+    menu_superior.add_command(label="Salir", command=ventana.destroy)
+
+    #--------    
     label_nombre=tk.Label(ventana, text="Nombre de la tarea:")
     entry_nombre=tk.Entry(ventana)
     label_estado=tk.Label(ventana, text="Estado de la tarea:")
@@ -177,7 +275,8 @@ if __name__=="__main__":
 
     btn_borrar = tk.Button(ventana, text="Borrar tarea", command=borrar_tarea_click)
 
-    listbox_tareas = tk.Listbox(ventana, font=("Arial", 12), width=40, height=10)
+
+    listbox_tareas = tk.Listbox(ventana, font=("Arial", 12), width=55, height=10)
     listbox_tareas.grid(row=8, column=0, columnspan=2)
     listbox_tareas.bind("<<ListboxSelect>>", seleccionar_tarea)
 
