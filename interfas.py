@@ -90,9 +90,20 @@ def agregar_tarea_click(event=None):
     estado_tarea = entry_estado.get()
     fecha_limite = entry_fecha.get()
 
-    nueva_tarea = Tarea(nombre_tarea, estado_tarea, fecha_limite)
-    gestor_tareas.agregar_tarea(nueva_tarea)
-    actualizar_listbox()
+    if nombre_tarea and estado_tarea and fecha_limite:
+        nueva_tarea = Tarea(nombre_tarea, estado_tarea, fecha_limite)
+        gestor_tareas.agregar_tarea(nueva_tarea)
+        actualizar_listbox()
+    else:
+        campos_vacios = ""
+        if not nombre_tarea:
+            campos_vacios += "Nombre, "
+        if not estado_tarea:
+            campos_vacios += "Estado, "
+        if not fecha_limite:
+            campos_vacios += "Fecha"
+        messagebox.showwarning("Campos vacíos", f"Por favor completa los siguientes campos: {campos_vacios}")
+
 
 def listar_tareas_click():
     tareas=gestor_tareas.listar_tareas()
@@ -154,8 +165,10 @@ if __name__=="__main__":
     btn_mostrar_tareas_vencer = tk.Button(ventana, text="Mostrar Tareas Próximas a Vencer", command=mostrar_tareas_proximas_a_vencer)
     btn_mostrar_tareas_vencer.grid(row=9, column=0, columnspan=2)
 
-
-    entry_fecha.bind("<Return>", agregar_tarea_click)  # Asociar Enter con la función agregar_tarea_click
+    # Asociar Enter con la función agregar_tarea_click
+    entry_nombre.bind("<Return>", agregar_tarea_click)
+    entry_estado.bind("<Return>", agregar_tarea_click)
+    entry_fecha.bind("<Return>", agregar_tarea_click)  
     entry_buscar.bind("<Return>", buscar_tarea_click)
     entry_borrar.bind("<Return>", borrar_tarea_click)
 
