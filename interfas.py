@@ -19,6 +19,7 @@ class GestorTareas:
     def agregar_tarea(self, tarea):
         with open(self.archivo_tareas, "a", encoding="utf-8") as archivo:
             archivo.write(f"{tarea.nombre},{tarea.estado},{tarea.fecha_limite}\n")
+            archivo.seek(0, 2)  # Mover el puntero al final del archivo
 
     def listar_tareas(self):
         if not os.path.exists(self.archivo_tareas):
