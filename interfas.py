@@ -229,11 +229,49 @@ def realizar_filtrado(event=None):
         else:
             filtrar_por_fecha(orden) if opcion_filtrar == "Fecha" else filtrar_por_nombre(orden)
 
+def cambiarTema():
+    # El código de cambio de tema de Azael
+    if ventana.cget("bg") == "white":
+        # Aplicar el tema oscuro
+        ventana.configure(bg="black")
+        label_estado.configure(bg="black", fg="white")
+        label_buscar.configure(bg="black", fg="white")
+        label_fecha.configure(bg="black", fg="white")
+        label_nombre.configure(bg="black", fg="white")
+        entry_buscar.configure(bg="black", fg="white")
+        entry_estado.configure(bg="black", fg="white")
+        entry_fecha.configure(bg="black", fg="white")
+        entry_nombre.configure(bg="black", fg="white")
+        listbox_tareas.configure(bg="black", fg="white")
+        btn_agregar.configure(bg="black", fg="white")
+        btn_borrar.configure(bg="black", fg="white")
+        btn_buscar.configure(bg="black", fg="white")
+        btn_mostrar_tareas_vencer.configure(bg="black", fg="white")
+    else:
+        # Volver al tema claro
+        ventana.configure(bg="white")
+        label_estado.configure(bg="white", fg="black")
+        label_buscar.configure(bg="white", fg="black")
+        label_fecha.configure(bg="white", fg="black")
+        label_nombre.configure(bg="white", fg="black")
+        entry_buscar.configure(bg="white", fg="black")
+        entry_estado.configure(bg="white", fg="black")
+        entry_fecha.configure(bg="white", fg="black")
+        entry_nombre.configure(bg="white", fg="black")
+        listbox_tareas.configure(bg="white", fg="black")
+        btn_agregar.configure(bg="white", fg="black")
+        btn_borrar.configure(bg="white", fg="black")
+        btn_buscar.configure(bg="white", fg="black")
+        btn_mostrar_tareas_vencer.configure(bg="white", fg="black")
+
+
 if __name__=="__main__":
     gestor_tareas=GestorTareas()
 
     ventana=tk.Tk()
     ventana.title("Gestion de Tareas")
+    # Establecer el tema inicial en color blanco
+    ventana.configure(bg="white")
 
     # Crear el menú superior
     menu_superior = tk.Menu(ventana)
@@ -242,6 +280,14 @@ if __name__=="__main__":
     # Crear los menús desplegables para filtrar
     menu_filtrar = tk.Menu(menu_superior, tearoff=0)
     menu_superior.add_cascade(label="Filtrar", menu=menu_filtrar)
+
+    # Crear el menú "Cambiar Tema" con dos subopciones
+    menu_cambiarTema = tk.Menu(menu_superior, tearoff=0)
+    menu_superior.add_cascade(label="Cambiar Tema", menu=menu_cambiarTema)
+
+    # Subopciones para el menú "Cambiar Tema"
+    menu_cambiarTema.add_command(label="Tema Claro", command=lambda: cambiarTema())
+    menu_cambiarTema.add_command(label="Tema Oscuro", command=lambda: cambiarTema())
 
     menu_filtrar_estado = tk.Menu(menu_filtrar, tearoff=0)
     menu_filtrar.add_cascade(label="Estado", menu=menu_filtrar_estado)
@@ -275,7 +321,6 @@ if __name__=="__main__":
     btn_buscar=tk.Button(ventana, text="Buscar tarea", command=buscar_tarea_click)
 
     btn_borrar = tk.Button(ventana, text="Borrar tarea", command=borrar_tarea_click)
-
 
     listbox_tareas = tk.Listbox(ventana, font=("Arial", 12), width=55, height=10)
     listbox_tareas.grid(row=8, column=0, columnspan=2)
