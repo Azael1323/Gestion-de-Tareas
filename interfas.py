@@ -79,9 +79,9 @@ class GestorTareas:
                     print(f"Fecha inválida para la tarea: {nombre}. Se omitirá esta tarea.")
 
         if tareas_a_vencer:
-            mensaje_tareas = "----- TAREAS PRÓXIMAS A VENCER EN LOS PRÓXIMOS 7 DÍAS -----\n"
+            mensaje_tareas = "--- TAREAS PRÓXIMAS A VENCER EN LOS PRÓXIMOS 7 DÍAS ---\n"
             for tarea in tareas_a_vencer:
-                mensaje_tareas += str(tarea) + "\n" + "------------------------" + "\n"
+                mensaje_tareas += str(tarea) + "\n" + "---------------------" + "\n"
             messagebox.showinfo("Tareas Próximas a Vencer", mensaje_tareas)
         else:
             messagebox.showinfo("Tareas Próximas a Vencer", "No hay tareas próximas a vencer en los próximos 7 días.")
@@ -308,25 +308,25 @@ if __name__=="__main__":
 
     #--------
         
-    label_nombre=tk.Label(ventana, text="Nombre de la tarea:")
-    entry_nombre=tk.Entry(ventana)
-    label_estado=tk.Label(ventana, text="Estado de la tarea:")
-    entry_estado=tk.Entry(ventana)
-    label_fecha=tk.Label(ventana, text="Fecha limite (dd-mm-yyyy):")
-    entry_fecha=tk.Entry(ventana)
-    btn_agregar=tk.Button(ventana, text="Agregar tarea", command=agregar_tarea_click)
+    label_nombre=tk.Label(ventana, font=("Arial", 11), text="Nombre de la tarea:")
+    entry_nombre=tk.Entry(ventana, width=50)
+    label_estado=tk.Label(ventana, font=("Arial", 11), text="Estado de la tarea:")
+    entry_estado=tk.Entry(ventana, width=50)
+    label_fecha=tk.Label(ventana, font=("Arial", 11), text="Fecha limite (dd-mm-yyyy):")
+    entry_fecha=tk.Entry(ventana, width=50)
+    btn_agregar=tk.Button(ventana, font=("Arial", 11), text="Agregar tarea", command=agregar_tarea_click)
 
-    label_buscar=tk.Label(ventana, text="Buscar tarea por nombre:")
-    entry_buscar=tk.Entry(ventana)
-    btn_buscar=tk.Button(ventana, text="Buscar tarea", command=buscar_tarea_click)
+    label_buscar=tk.Label(ventana, font=("Arial", 11), text="Buscar tarea por nombre:")
+    entry_buscar=tk.Entry(ventana, width=50)
+    btn_buscar=tk.Button(ventana,  font=("Arial", 11), text="Buscar tarea", command=buscar_tarea_click)
 
-    btn_borrar = tk.Button(ventana, text="Borrar tarea", command=borrar_tarea_click)
+    btn_borrar = tk.Button(ventana, font=("Arial", 11), text="Borrar tarea", command=borrar_tarea_click)
 
     listbox_tareas = tk.Listbox(ventana, font=("Arial", 12), width=55, height=10)
     listbox_tareas.grid(row=8, column=0, columnspan=2)
     listbox_tareas.bind("<<ListboxSelect>>", seleccionar_tarea)
 
-    btn_mostrar_tareas_vencer = tk.Button(ventana, text="Mostrar Tareas Próximas a Vencer", command=mostrar_tareas_proximas_a_vencer)
+    btn_mostrar_tareas_vencer = tk.Button(ventana, font=("Arial", 11),text="Mostrar Tareas Próximas a Vencer", command=mostrar_tareas_proximas_a_vencer)
     btn_mostrar_tareas_vencer.grid(row=9, column=0, columnspan=2)
 
     # Establecer a todos el color tema blanco por defecto.
