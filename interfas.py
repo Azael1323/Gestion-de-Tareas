@@ -106,13 +106,16 @@ def borrar_tarea_click(event=None):
         seleccion = listbox_tareas.curselection()
         if seleccion:
             nombre_borrar = listbox_tareas.get(seleccion)
-            listbox_tareas.delete(seleccion)
-            gestor_tareas.borrar_tarea(nombre_borrar)
-            messagebox.showinfo("Tarea borrada", "La tarea se ha borrado con éxito.")
+            confirmacion = messagebox.askyesno("Confirmación", f"¿Seguro que deseas borrar la tarea:\n{nombre_borrar}?", icon='warning')
+            if confirmacion:
+                listbox_tareas.delete(seleccion)
+                gestor_tareas.borrar_tarea(nombre_borrar)
+                messagebox.showinfo("Tarea borrada", "La tarea se ha borrado con éxito.")
         else:
             messagebox.showwarning("Ninguna tarea seleccionada", "Por favor, selecciona una tarea antes de borrar.")
     except tk.TclError:
         messagebox.showwarning("Error", "No hay tareas en la lista.")
+
 
 def agregar_tarea_click(event=None):
     nombre_tarea = entry_nombre.get()
@@ -206,3 +209,4 @@ if __name__=="__main__":
     actualizar_listbox()
 
     ventana.mainloop()
+
