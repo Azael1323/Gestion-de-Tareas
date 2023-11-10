@@ -67,13 +67,15 @@ class GestorTareas:
         with open(self.archivo_tareas, "r") as archivo:
             for linea in archivo:
                 nombre, estado, fecha_limite = linea.strip().split(",")
-                fecha_limite = datetime.datetime.strptime(fecha_limite, "%Y-%m-%d %H:%M:%S")
-
-
-                # Verificar si la tarea está próxima a vencer (por ejemplo, en los próximos 7 días)
-                dias_hasta_vencimiento = (fecha_limite - hoy).days
-                if 0 <= dias_hasta_vencimiento <= 7:
-                    tareas_a_vencer.append(Tarea(nombre, estado, fecha_limite))
+                try:
+                    fecha_limite = datetime.datetime.strptime(fecha_limite, "%d/%m/%Y")
+                    # Verificar si la tarea está próxima a vencer (por ejemplo, en los próximos 7 días)
+                    dias_hasta_vencimiento = (fecha_limite - hoy).days
+                    if 0 <= dias_hasta_vencimiento <= 7:
+                        tareas_a_vencer.append(Tarea(nombre, estado, fecha_limite))
+                except ValueError:
+                    # Manejar las fechas que no coinciden con el formato esperado
+                    print(f"Fecha inválida para la tarea: {nombre}. Se omitirá esta tarea.")
 
         if tareas_a_vencer:
             mensaje_tareas = "----- TAREAS PRÓXIMAS A VENCER EN LOS PRÓXIMOS 7 DÍAS -----\n"
