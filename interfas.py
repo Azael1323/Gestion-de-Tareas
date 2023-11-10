@@ -329,6 +329,16 @@ if __name__=="__main__":
     btn_mostrar_tareas_vencer = tk.Button(ventana, text="Mostrar Tareas Próximas a Vencer", command=mostrar_tareas_proximas_a_vencer)
     btn_mostrar_tareas_vencer.grid(row=9, column=0, columnspan=2)
 
+    # Establecer a todos el color tema blanco por defecto.
+    label_nombre.configure(bg="white", fg="black")
+    label_estado.configure(bg="white", fg="black")
+    label_fecha.configure(bg="white", fg="black")
+    label_buscar.configure(bg="white", fg="black")
+    btn_borrar.configure(bg="white", fg="black")
+    btn_agregar.configure(bg="white", fg="black")
+    btn_buscar.configure(bg="white", fg="black")
+    btn_mostrar_tareas_vencer.configure(bg="white", fg="black")
+
     # Asociar Enter con la función agregar_tarea_click
     entry_nombre.bind("<Return>", agregar_tarea_click)
     entry_estado.bind("<Return>", agregar_tarea_click)
