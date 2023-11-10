@@ -39,7 +39,7 @@ class GestorTareas:
         with open(self.archivo_tareas, "r", encoding="utf-8") as archivo:
             for linea in archivo:
                 nombre_tarea, estado, fecha_limite = linea.strip().split(",")
-                if nombre_tarea==nombre:
+                if nombre_tarea.lower()==nombre.lower():
                     return Tarea(nombre_tarea, estado, fecha_limite)
         return None
 
@@ -104,7 +104,6 @@ def agregar_tarea_click(event=None):
             campos_vacios += "Fecha"
         messagebox.showwarning("Campos vacíos", f"Por favor completa los siguientes campos: {campos_vacios}")
 
-
 def listar_tareas_click():
     tareas=gestor_tareas.listar_tareas()
     text_tareas.delete("1.0", tk.END)
@@ -123,7 +122,6 @@ def borrar_tarea_click(event=None):
     gestor_tareas.borrar_tarea(nombre_borrar)
     actualizar_listbox()
     messagebox.showinfo("Tarea borrada", "La tarea se ha borrado con exito.")
-
 
 def actualizar_listbox():
     text_tareas.delete("1.0", tk.END)
