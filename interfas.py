@@ -306,8 +306,7 @@ if __name__=="__main__":
 
     menu_superior.add_command(label="Salir", command=ventana.destroy)
 
-    #--------
-        
+    #--------    
     label_nombre=tk.Label(ventana, font=("Arial", 11), text="Nombre de la tarea:")
     entry_nombre=tk.Entry(ventana, width=50)
     label_estado=tk.Label(ventana, font=("Arial", 11), text="Estado de la tarea:")
