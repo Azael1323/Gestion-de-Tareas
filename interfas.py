@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import messagebox
+from tkcalendar import DateEntry
 import datetime
 
 class Tarea:
@@ -119,7 +120,7 @@ def borrar_tarea_click(event=None):
 def agregar_tarea_click(event=None):
     nombre_tarea = entry_nombre.get()
     estado_tarea = entry_estado.get()
-    fecha_limite = entry_fecha.get()
+    fecha_limite = cal.get_date()
 
     if nombre_tarea and estado_tarea and fecha_limite:
         nueva_tarea = Tarea(nombre_tarea, estado_tarea, fecha_limite)
@@ -128,7 +129,7 @@ def agregar_tarea_click(event=None):
         # borrar los campos de entrada
         entry_nombre.delete(0, tk.END)
         entry_estado.delete(0, tk.END)
-        entry_fecha.delete(0, tk.END)
+        cal.set_date("")  # Esto establecerá la fecha en blanco
         actualizar_listbox()
     else:
         campos_vacios = ""
@@ -263,7 +264,6 @@ def cambiarTema():
         btn_borrar.configure(bg="white", fg="black")
         btn_buscar.configure(bg="white", fg="black")
         btn_mostrar_tareas_vencer.configure(bg="white", fg="black")
-
 
 if __name__=="__main__":
     gestor_tareas=GestorTareas()
