@@ -305,7 +305,6 @@ if __name__=="__main__":
     # Subopciones para el menú "Cambiar Tema"
     menu_cambiarTema.add_command(label="Realizar cambio", command=lambda: cambiarTema())
 
-
     menu_filtrar_estado = tk.Menu(menu_filtrar, tearoff=0)
     menu_filtrar.add_cascade(label="Estado", menu=menu_filtrar_estado)
     menu_filtrar_estado.add_command(label="Ascendente", command=lambda: realizar_filtrado_desde_menu("Estado", "Ascendente"))
