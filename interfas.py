@@ -117,10 +117,27 @@ def borrar_tarea_click(event=None):
     except tk.TclError:
         messagebox.showwarning("Error", "No hay tareas en la lista.")
 
+def abrir_calendario():
+    fecha_seleccionada = entry_fecha.get_date()
+    # Crear una nueva ventana para el calendario
+    ventana_calendario = tk.Toplevel(ventana)
+    # Utilizar DateEntry en la nueva ventana
+    cal_calendario = DateEntry(ventana_calendario, width=12, background="darkblue", foreground="white", borderwidth=2, year=2023, month=11, day=15, date_pattern='dd/mm/y')
+    cal_calendario.grid(row=0, column=0)
+
+    def seleccionar_fecha_calendario():
+        fecha_seleccionada = cal_calendario.get_date()
+        entry_fecha.delete(fecha_seleccionada, 0, tk.END)
+        entry_fecha.insert(entry_fecha.insert, 0, fecha_seleccionada.strftime("%d/%m/%Y"))
+        ventana_calendario.destroy()
+
+    btn_seleccionar_fecha = tk.Button(ventana_calendario, text="Seleccionar Fecha", command=seleccionar_fecha_calendario)
+    btn_seleccionar_fecha.grid(row=1, column=0)
+
 def agregar_tarea_click(event=None):
     nombre_tarea = entry_nombre.get()
     estado_tarea = entry_estado.get()
-    fecha_limite = cal.get_date()
+    fecha_limite = entry_fecha.get_date()
 
     if nombre_tarea and estado_tarea and fecha_limite:
         nueva_tarea = Tarea(nombre_tarea, estado_tarea, fecha_limite)
@@ -129,7 +146,7 @@ def agregar_tarea_click(event=None):
         # borrar los campos de entrada
         entry_nombre.delete(0, tk.END)
         entry_estado.delete(0, tk.END)
-        cal.set_date("")  # Esto establecerá la fecha en blanco
+        entry_fecha.delete(0, tk.END)  # Esto eliminará el contenido del DateEntry
         actualizar_listbox()
     else:
         campos_vacios = ""
@@ -309,10 +326,14 @@ if __name__=="__main__":
     #--------    
     label_nombre=tk.Label(ventana, font=("Arial", 11), text="Nombre de la tarea:")
     entry_nombre=tk.Entry(ventana, width=50)
+
     label_estado=tk.Label(ventana, font=("Arial", 11), text="Estado de la tarea:")
     entry_estado=tk.Entry(ventana, width=50)
-    label_fecha=tk.Label(ventana, font=("Arial", 11), text="Fecha limite (dd-mm-yyyy):")
-    entry_fecha=tk.Entry(ventana, width=50)
+
+    label_fecha = tk.Label(ventana, font=("Arial", 11), text="Fecha limite (dd/mm/yyyy):")
+    entry_fecha = DateEntry(ventana, width=50, background="darkblue", foreground="white", borderwidth=2, date_pattern='dd/mm/y')
+    btn_abrir_calendario = tk.Button(ventana, text="📅", command=abrir_calendario)  # Puedes cambiar el icono del calendario
+
     btn_agregar=tk.Button(ventana, font=("Arial", 11), text="Agregar tarea", command=agregar_tarea_click)
 
     label_buscar=tk.Label(ventana, font=("Arial", 11), text="Buscar tarea por nombre:")

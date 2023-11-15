@@ -3,3 +3,6 @@ comer again,ya,12/12/2025
 baño,ahora,12/5/2024
 falar,morir,13/02/2060
 ver fisica,ahora,11/11/2023
+Probando,haciendo,2023-11-22
+Prueba de Fecha limite,haciendo,2023-11-17
+Prueba 3,Haciendo,2023-11-16
